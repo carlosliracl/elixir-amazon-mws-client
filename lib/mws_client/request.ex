@@ -1,32 +1,12 @@
 defmodule MWSClient.Request do
 
-  @hosts %{
-    # North America
-    "A2EUQ1WTGCTBG2" => "mws.amazonservices.com",     # Canada
-    "ATVPDKIKX0DER"  => "mws.amazonservices.com",     # US
-    "A1AM78C64UM0Y8" => "mws.amazonservices.com",     # Mexico
-
-    # Europe
-    "A1RKKUPIHCS9HS" => "mws-eu.amazonservices.com",  # Spain
-    "A1F83G8C2ARO7P" => "mws-eu.amazonservices.com",  # UK
-    "A13V1IB3VIYZZH" => "mws-eu.amazonservices.com",  # France
-    "A1PA6795UKMFR9" => "mws-eu.amazonservices.com",  # Germany
-    "APJ6JRA9NG5V4"  => "mws-eu.amazonservices.com",  # Italy
-
-    # Other
-    "A2Q3Y263D00KWC" => "mws.amazonservices.com",     # Brazil
-    "A21TJRUUN4KGV"  => "mws.amazonservices.in",      # India
-    "AAHKV2X7AFYLW"  => "mws.amazonservices.com.cn",  # China
-    "A1VC38T7YXB528" => "mws.amazonservices.jp",      # Japan
-    "A39IBJ37TRP1C6" => "mws.amazonservices.com.au",  # Australia
-  }
-
   alias MWSClient.Config
   alias MWSClient.Operation
 
   def to_uri(operation = %Operation{}, config = %Config{}) do
     query = config |> Config.to_params |> Map.merge(operation.params) |> percent_encode_query
-    %URI{scheme: "https", host: Map.fetch!(@hosts, config.site_id), path: operation.path, query: query, port: 443}
+    host = Config.host(config)
+    %URI{scheme: config.scheme, host: host, path: operation.path, query: query, port: config.port}
     |> sign_url(config, operation.timestamp, operation.method)
   end
 
