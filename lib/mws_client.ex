@@ -92,6 +92,13 @@ defmodule MWSClient do
     |> request(config)
   end
 
+  def get_competitive_pricing_for_asin(asin_list, config = %Config{}, opts \\ []) do
+    opts = Keyword.merge(opts, marketplace_id: config.site_id)
+
+    Products.get_competitive_pricing_for_asin(asin_list, opts)
+    |> request(config)
+  end
+
   @conditions ["New", "Used", "Collectible", "Refurbished", "Club"]
   def get_lowest_priced_offers_for_asin(asin, item_condition, config = %Config{}, opts \\ []) when is_binary(asin) and item_condition in @conditions do
     opts = Keyword.merge(opts, marketplace_id: config.site_id)

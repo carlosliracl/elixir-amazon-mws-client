@@ -53,18 +53,22 @@ defmodule MWSClient.Products do
     |> to_operation(@version, @path)
   end
 
+  def get_competitive_pricing_for_asin(asin_list, opts) do
+    %{"Action" => "GetCompetitivePricingForASIN",
+      "ASINList" => asin_list}
+    |> add(opts, [:marketplace_id])
+    |> restructure("ASINList", "ASIN")
+    |> to_operation(@version, @path)
+  end
+
   @conditions ["New", "Used", "Collectible", "Refurbished", "Club"]
   def get_lowest_priced_offers_for_asin(asin, condition, opts) when condition in @conditions do
-    white_list = [
-      :marketplace_id,
-    ]
-
     %{
       "Action" => "GetLowestPricedOffersForASIN",
       "ASIN" => asin,
       "ItemCondition" => condition
     }
-    |> add(opts, white_list)
+    |> add(opts, [:marketplace_id])
     |> to_operation(@version, @path)
   end
 
