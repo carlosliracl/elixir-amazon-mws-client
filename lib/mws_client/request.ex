@@ -30,7 +30,7 @@ defmodule MWSClient.Request do
   end
 
   defp add_timestamp(url_parts, timestamp) do
-    time = timestamp || DateTime.to_iso8601(DateTime.utc_now)
+    time = timestamp || (DateTime.utc_now |> DateTime.truncate(:second) |> DateTime.to_iso8601())
     updated_query = url_parts.query
       |> URI.decode_query
       |> Map.put_new("Timestamp", time)

@@ -92,6 +92,14 @@ defmodule MWSClient do
     |> request(config)
   end
 
+  @conditions ["New", "Used", "Collectible", "Refurbished", "Club"]
+  def get_lowest_priced_offers_for_asin(asin, item_condition, config = %Config{}, opts \\ []) when is_binary(asin) and item_condition in @conditions do
+    opts = Keyword.merge(opts, marketplace_id: config.site_id)
+
+    Products.get_lowest_priced_offers_for_asin(asin, item_condition, opts)
+    |> request(config, true)
+  end
+
   def get_product_categories_for_asin(asin, config = %Config{}, opts \\ []) do
     opts = Keyword.merge(opts, marketplace_id: config.site_id)
 
@@ -164,15 +172,23 @@ defmodule MWSClient do
   end
   ### REPORTS
 
-
-  def request(operation = %Operation{}, config = %Config{}) do
+  def request(operation = %Operation{}, config = %Config{}, query_in_body \\ false) do
     uri = Request.to_uri(operation, config)
 
-    {status, response} = if operation.body do
-      post(uri, operation.body, operation.headers)
-    else
-      post(uri, uri.query, operation.headers)
-    end
+    {status, response} =
+      case query_in_body do
+        true ->
+          post(%{uri | query: nil}, uri.query, [
+            {"Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"} | operation.headers
+          ])
+
+        false ->
+          if operation.body do
+            post(uri, operation.body, operation.headers)
+          else
+            post(uri, uri.query, operation.headers)
+          end
+      end
 
     parse_response({status, response})
   end

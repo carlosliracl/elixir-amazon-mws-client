@@ -9,11 +9,16 @@ defmodule MWSClient.Parser do
       "text/xml" <> _charset ->
         XmlToMap.naive_map(body)
 
+      "application/xml" <> _charset ->
+        XmlToMap.naive_map(body)
+
       "text/plain;charset=" <> _charset ->
         body
         |> String.split("\r\n")
         |> CSV.decode!(separator: ?\t, headers: true)
         |> Enum.to_list()
+      "text/html" ->
+        body
     end
   end
 
