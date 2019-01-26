@@ -43,7 +43,7 @@ defmodule MWSClient.Mixfile do
   defp deps do
     [ {:csv, "~> 2.1.1"},
       {:elixir_xml_to_map, github: "addico/elixir-xml-to-map", branch: "master"},
-      {:httpoison, "~> 1.3.0"},
+      {:httpoison, "~> 1.4.0"},
       {:inflex, "~> 1.10" }, #camelize
       {:html_sanitize_ex, "~> 1.3"},
       {:timex, "~> 3.0"},
