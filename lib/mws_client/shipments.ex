@@ -3,7 +3,7 @@ defmodule MWSClient.Shipments do
   @path "/ShipmentInvoicing/#{@version}"
 
   @moduledoc """
-  Fulfillment Outbound Shipment API section of Amazon MWS
+  Shipments API section of Amazon MWS
   """
 
   import MWSClient.Utils
