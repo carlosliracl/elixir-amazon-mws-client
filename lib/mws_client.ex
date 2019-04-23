@@ -10,6 +10,7 @@ defmodule MWSClient do
     Feed,
     Subscriptions,
     Orders,
+    Shipments,
     Reports
   }
 
@@ -154,6 +155,22 @@ defmodule MWSClient do
     |> request(config)
   end
   ### ORDERS
+
+  ### SHIPMENTS
+  def get_fba_outbound_shipment_detail(params, config = %Config{}, opts \\ []) do
+    opts = Keyword.merge(opts, marketplace_id: [config.site_id])
+
+    Shipments.get_fba_outbound_shipment_detail(params, opts)
+    |> request(config)
+  end
+
+  def submit_fba_outbound_shipment_invoice(params, config = %Config{}, opts \\ []) do
+    opts = Keyword.merge(opts, marketplace_id: [config.site_id])
+
+    Shipments.submit_fba_outbound_shipment_invoice(params, opts)
+    |> request(config)
+  end
+  ### SHIPMENTS
 
   ### REPORTS
   def request_report(report_type, config = %Config{}, opts \\ []) do
