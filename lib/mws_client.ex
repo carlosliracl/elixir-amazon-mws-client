@@ -1,5 +1,4 @@
 defmodule MWSClient do
-
   use HTTPoison.Base
 
   alias MWSClient.{
@@ -62,6 +61,7 @@ defmodule MWSClient do
     Feed.get_feed_submission_result(feed_id, opts)
     |> request(config)
   end
+
   ### FEEDS
 
   ### PRODUCTS
@@ -101,7 +101,8 @@ defmodule MWSClient do
   end
 
   @conditions ["New", "Used", "Collectible", "Refurbished", "Club"]
-  def get_lowest_priced_offers_for_asin(asin, item_condition, config = %Config{}, opts \\ []) when is_binary(asin) and item_condition in @conditions do
+  def get_lowest_priced_offers_for_asin(asin, item_condition, config = %Config{}, opts \\ [])
+      when is_binary(asin) and item_condition in @conditions do
     opts = Keyword.merge(opts, marketplace_id: config.site_id)
 
     Products.get_lowest_priced_offers_for_asin(asin, item_condition, opts)
@@ -131,6 +132,21 @@ defmodule MWSClient do
     Subscriptions.deregister_destination(url, opts)
     |> request(config)
   end
+
+  def list_destinations(config = %Config{}, opts \\ []) do
+    opts = Keyword.merge(opts, marketplace_id: config.site_id)
+
+    Subscriptions.list_registered_destinations(opts)
+    |> request(config)
+  end
+
+  def send_test_notification(url, config = %Config{}, opts \\ []) do
+    opts = Keyword.merge(opts, marketplace_id: config.site_id)
+
+    Subscriptions.send_test_notification(url, opts)
+    |> request(config)
+  end
+
   ### SUBSCRIPTIONS
 
   ### ORDERS
@@ -154,6 +170,7 @@ defmodule MWSClient do
     Orders.get_order(order_id, opts)
     |> request(config)
   end
+
   ### ORDERS
 
   ### SHIPMENTS
@@ -170,6 +187,7 @@ defmodule MWSClient do
     Shipments.submit_fba_outbound_shipment_invoice(params, opts)
     |> request(config)
   end
+
   ### SHIPMENTS
 
   ### REPORTS
@@ -194,6 +212,7 @@ defmodule MWSClient do
     Reports.get_report(report_id)
     |> request(config)
   end
+
   ### REPORTS
 
   def request(operation = %Operation{}, config = %Config{}, query_in_body \\ false) do
@@ -203,7 +222,8 @@ defmodule MWSClient do
       case query_in_body do
         true ->
           post(%{uri | query: nil}, uri.query, [
-            {"Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"} | operation.headers
+            {"Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"}
+            | operation.headers
           ])
 
         false ->
@@ -224,5 +244,4 @@ defmodule MWSClient do
   defp parse_response({:error, error}) do
     {:error, error}
   end
-
 end

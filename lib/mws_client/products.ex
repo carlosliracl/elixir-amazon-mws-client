@@ -7,35 +7,30 @@ defmodule MWSClient.Products do
   def list_matching_products(query, opts) do
     white_list = [
       :marketplace_id,
-      :query_context_id,
+      :query_context_id
     ]
 
-    %{"Action" => "ListMatchingProducts",
-      "Query" => query}
-      |> add(opts, white_list)
-      |> to_operation(@version, @path)
+    %{"Action" => "ListMatchingProducts", "Query" => query}
+    |> add(opts, white_list)
+    |> to_operation(@version, @path)
   end
 
   def get_matching_product(asin_list, opts) do
-    %{"Action" => "GetMatchingProduct",
-      "ASINList" => asin_list}
-      |> add(opts, [:marketplace_id])
-      |> restructure("ASINList", "ASIN")
-      |> to_operation(@version, @path)
+    %{"Action" => "GetMatchingProduct", "ASINList" => asin_list}
+    |> add(opts, [:marketplace_id])
+    |> restructure("ASINList", "ASIN")
+    |> to_operation(@version, @path)
   end
 
   def get_matching_product_for_id(id_type, id_list, opts) do
-    %{"Action" => "GetMatchingProductForId",
-      "IdType" => id_type,
-      "IdList" => id_list}
-      |> add(opts, [:marketplace_id])
-      |> restructure("IdList", "Id")
-      |> to_operation(@version, @path)
+    %{"Action" => "GetMatchingProductForId", "IdType" => id_type, "IdList" => id_list}
+    |> add(opts, [:marketplace_id])
+    |> restructure("IdList", "Id")
+    |> to_operation(@version, @path)
   end
 
   def get_product_categories_for_asin(asin, opts) do
-    %{"Action" => "GetProductCategoriesForASIN",
-      "ASIN" => asin}
+    %{"Action" => "GetProductCategoriesForASIN", "ASIN" => asin}
     |> add(opts, [:marketplace_id])
     |> to_operation(@version, @path)
   end
@@ -43,19 +38,17 @@ defmodule MWSClient.Products do
   def get_lowest_offer_listings_for_asin(asin_list, opts) do
     white_list = [
       :marketplace_id,
-      :item_condition,
+      :item_condition
     ]
 
-    %{"Action" => "GetLowestOfferListingsForASIN",
-      "ASINList" => asin_list}
+    %{"Action" => "GetLowestOfferListingsForASIN", "ASINList" => asin_list}
     |> add(opts, white_list)
     |> restructure("ASINList", "ASIN")
     |> to_operation(@version, @path)
   end
 
   def get_competitive_pricing_for_asin(asin_list, opts) do
-    %{"Action" => "GetCompetitivePricingForASIN",
-      "ASINList" => asin_list}
+    %{"Action" => "GetCompetitivePricingForASIN", "ASINList" => asin_list}
     |> add(opts, [:marketplace_id])
     |> restructure("ASINList", "ASIN")
     |> to_operation(@version, @path)
@@ -71,5 +64,4 @@ defmodule MWSClient.Products do
     |> add(opts, [:marketplace_id])
     |> to_operation(@version, @path)
   end
-
 end
