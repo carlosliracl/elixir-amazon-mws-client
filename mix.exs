@@ -50,7 +50,8 @@ defmodule MWSClient.Mixfile do
       {:ex_doc, "~> 0.19", only: :dev},
       {:exsync, "~> 0.2", only: :dev},
       {:excoveralls, "~> 0.10", only: :test},
-      {:erlsom, "~> 1.4"}
+      {:erlsom, "~> 1.4"},
+      {:xml_builder, "~> 2.1"}
     ]
   end
 end
