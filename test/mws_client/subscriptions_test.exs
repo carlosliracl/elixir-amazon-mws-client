@@ -67,6 +67,82 @@ defmodule MWSClient.SubscriptionsTest do
     assert res == exp
   end
 
+  test "create subscription" do
+    res =
+      Subscriptions.create_subscription(
+        "http://foo.bar/baz",
+        "FeedType",
+        marketplace_id: "ATVPDKIKX0DER"
+      )
+
+    exp = %MWSClient.Operation{
+      body: nil,
+      headers: [],
+      method: "POST",
+      path: "/Subscriptions/2013-07-01",
+      timestamp: nil,
+      params: %{
+        "Action" => "CreateSubscription",
+        "Subscription.Destination.AttributeList.member.1.Key" => "sqsQueueUrl",
+        "Subscription.Destination.AttributeList.member.1.Value" => "http://foo.bar/baz",
+        "Subscription.Destination.DeliveryChannel" => "SQS",
+        "Subscription.IsEnabled" => true,
+        "Subscription.NotificationType" => "FeedType",
+        "MarketplaceId" => "ATVPDKIKX0DER",
+        "Version" => "2013-07-01"
+      }
+    }
+
+    assert res == exp
+  end
+
+  test "delete subscription" do
+    res =
+      Subscriptions.delete_subscription(
+        "http://foo.bar/baz",
+        "FeedType",
+        marketplace_id: "ATVPDKIKX0DER"
+      )
+
+    exp = %MWSClient.Operation{
+      body: nil,
+      headers: [],
+      method: "POST",
+      path: "/Subscriptions/2013-07-01",
+      timestamp: nil,
+      params: %{
+        "Action" => "DeleteSubscription",
+        "Destination.AttributeList.member.1.Key" => "sqsQueueUrl",
+        "Destination.AttributeList.member.1.Value" => "http://foo.bar/baz",
+        "Destination.DeliveryChannel" => "SQS",
+        "NotificationType" => "FeedType",
+        "MarketplaceId" => "ATVPDKIKX0DER",
+        "Version" => "2013-07-01"
+      }
+    }
+
+    assert res == exp
+  end
+
+  test "list subscriptions" do
+    res = Subscriptions.list_subscriptions(marketplace_id: "ATVPDKIKX0DER")
+
+    exp = %MWSClient.Operation{
+      body: nil,
+      headers: [],
+      method: "POST",
+      path: "/Subscriptions/2013-07-01",
+      timestamp: nil,
+      params: %{
+        "Action" => "ListSubscriptions",
+        "MarketplaceId" => "ATVPDKIKX0DER",
+        "Version" => "2013-07-01"
+      }
+    }
+
+    assert res == exp
+  end
+
   test "send test notification" do
     res =
       Subscriptions.send_test_notification("http://foo.bar/baz", marketplace_id: "ATVPDKIKX0DER")

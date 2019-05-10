@@ -133,6 +133,27 @@ defmodule MWSClient do
     |> request(config)
   end
 
+  def subscribe_feed(url, notification_type, config = %Config{}, opts \\ []) do
+    opts = Keyword.merge(opts, marketplace_id: config.site_id)
+
+    Subscriptions.create_subscription(url, notification_type, opts)
+    |> request(config)
+  end
+
+  def unsubscribe_feed(url, notification_type, config = %Config{}, opts \\ []) do
+    opts = Keyword.merge(opts, marketplace_id: config.site_id)
+
+    Subscriptions.delete_subscription(url, notification_type, opts)
+    |> request(config)
+  end
+
+  def list_subscriptions(config = %Config{}, opts \\ []) do
+    opts = Keyword.merge(opts, marketplace_id: config.site_id)
+
+    Subscriptions.list_subscriptions(opts)
+    |> request(config)
+  end
+
   def list_destinations(config = %Config{}, opts \\ []) do
     opts = Keyword.merge(opts, marketplace_id: config.site_id)
 
