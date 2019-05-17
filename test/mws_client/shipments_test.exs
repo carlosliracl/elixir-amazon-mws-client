@@ -49,13 +49,13 @@ defmodule MWSClient.ShipmentsTest do
   test "get_fba_outbound_shipment_invoice_status" do
     result =
       Shipments.get_fba_outbound_shipment_invoice_status(
-        [amazon_shipment_id: "shipment_id"],
+        "shipment_id",
         marketplace_id: "ATVPDKIKX0DER"
       )
 
     expectation = %Operation{
       params: %{
-        "AmazonShipmentId" => "shipment_id",
+        "AmazonShipmentId.Id.1" => "shipment_id",
         "Action" => "GetFBAOutboundShipmentInvoiceStatus",
         "MarketplaceId" => "ATVPDKIKX0DER",
         "Version" => "2018-09-01"

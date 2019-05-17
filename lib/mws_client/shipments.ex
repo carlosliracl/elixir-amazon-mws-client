@@ -24,10 +24,13 @@ defmodule MWSClient.Shipments do
     |> to_operation(@version, @path, data)
   end
 
-  def get_fba_outbound_shipment_invoice_status(params, opts) do
-    %{"Action" => "GetFBAOutboundShipmentInvoiceStatus"}
-    |> add(params, [:amazon_shipment_id])
+  def get_fba_outbound_shipment_invoice_status(amazon_shipment_id, opts) do
+    %{
+      "Action" => "GetFBAOutboundShipmentInvoiceStatus",
+      "AmazonShipmentId" => List.wrap(amazon_shipment_id)
+    }
     |> add(opts, [:marketplace_id])
+    |> restructure("AmazonShipmentId", "Id")
     |> to_operation(@version, @path)
   end
 end
